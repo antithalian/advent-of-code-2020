@@ -1,9 +1,9 @@
-# day one solution
+# day one question 1 solution
 # find product of two numbers in input.txt list that sum to 2020
 
 # pull everything out of input file
 nums = []
-with open('day1_i1.txt', 'r') as file:
+with open('input.txt', 'r') as file:
     for line in file:
         nums.append(int(line))
 
