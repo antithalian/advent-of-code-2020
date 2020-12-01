@@ -3,7 +3,7 @@
 
 # pull everything out of input file
 nums = []
-with open('input.txt', 'r') as file:
+with open('day1_i1.txt', 'r') as file:
     for line in file:
         nums.append(int(line))
 
