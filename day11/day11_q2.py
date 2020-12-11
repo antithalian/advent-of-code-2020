@@ -2,7 +2,9 @@
 # this one is gonna need commenting if I ever want to understand it again
 
 from copy import deepcopy
+import time
 
+start = time.time()
 # read in the basic data
 # add a leading and trailing zero to remove the need to check for edge later
 seat_map = []
@@ -72,4 +74,4 @@ while changed:
     seat_map = deepcopy(curr_map)
 
 # find the final number of occupied seats by summing all '#' locs
-print(sum(line.count('#') for line in seat_map))
+print(sum(line.count('#') for line in seat_map), time.time() - start)

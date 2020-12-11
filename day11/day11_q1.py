@@ -1,6 +1,9 @@
 # day 11 question 1
 
 from copy import deepcopy
+import time
+
+start = time.time()
 
 seat_map = []
 with open('input.txt', mode='r') as file:
@@ -64,4 +67,4 @@ while changed:
     seat_map = deepcopy(curr_map)
 
 # find the final number of occupied seats by summing all '#' locs
-print(sum(line.count('#') for line in seat_map))
+print(sum(line.count('#') for line in seat_map), time.time() - start)
