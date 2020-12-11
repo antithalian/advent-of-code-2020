@@ -20,36 +20,20 @@ seat_map.append(list('0' * len(seat_map[1])))
 # if a seat is occupied and four or more adjacent seats are occupied, it becomes empty
 # otherwise, state doesn't change
 
+# check the adjacent seats - updated to use the method I used in q2
 def check_adj(row, col, map):
     
-    up_left = map[row - 1][col - 1]
-    up = map[row - 1][col]
-    up_right = map[row - 1][col + 1]
-    left = map[row][col - 1]
-    right = map[row][col + 1]
-    dn_left = map[row + 1][col - 1]
-    dn = map[row + 1][col]
-    dn_right = map[row + 1][col + 1]
+    # check what's in every direction
+    # c_r and c_c specify the direction to look row-wise and column-wise
+    # if they're both zero, we'd be checking the current position
+    # don't want that, so ignore it
+    adj_seats = [map[row + c_r][col + c_c]
+                        for c_r in range(-1, 2)
+                        for c_c in range(-1, 2)
+                        if (c_r, c_c) != (0, 0)]
 
-    adj_seats = [up, dn, up_left, up_right, left, right, dn_left, dn_right]
-
-    ct_e = len([e for e in adj_seats if e == 'L'])
-    ct_o = len([o for o in adj_seats if o == '#'])
-
-    # return True if changed, False if not
-    if map[row][col] == 'L':
-        if ct_o == 0: # aaaand here was the bug - read the spec properly!
-            return '#', True
-        else:
-            return 'L', False
-    elif map[row][col] == '#':
-        if ct_o >= 4:
-            return 'L', True
-        else:
-            return '#', False
-    else:
-        return map[row][col], False
-
+    # count occupied seats by summing the adj_seats list
+    return sum([1 for seat in adj_seats if seat == '#'])
 
 def iter_map(map):
 
@@ -59,21 +43,25 @@ def iter_map(map):
     for row in range(1, len(map) - 1):
         for col in range(1, len(map[0]) - 1):
 
-            new_map[row][col], iter_change = check_adj(row, col, map)
-            if not changed and iter_change == True:
+            ct_occ = check_adj(row, col, map)
+
+            # apply the rules
+            if map[row][col] == 'L' and ct_occ == 0:
+                new_map[row][col] = '#'
+            if map[row][col] == '#' and ct_occ >= 4:
+                new_map[row][col] = 'L'
+
+            # update the change tracking variable if we've changed anything
+            if map[row][col] != new_map[row][col] and changed == False:
                 changed = True
 
     return new_map, changed
 
+# iterate the map until nothing changes
 changed = True
 while changed:
     curr_map, changed = iter_map(seat_map)
     seat_map = deepcopy(curr_map)
 
-occupied = 0
-for row in range(1, len(seat_map) - 1):
-    for col in range(1, len(seat_map[0]) - 1):
-        if seat_map[row][col] == '#':
-            occupied += 1
-
-print(occupied)
+# find the final number of occupied seats by summing all '#' locs
+print(sum(line.count('#') for line in seat_map))
