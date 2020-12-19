@@ -57,3 +57,18 @@ with open('input.txt', mode='r') as file:
 
         fields[field] = ovr_range
 
+field_col = {}
+for field, rang in fields.items():
+
+    for ind in range(len(nearby[0])):
+
+        col = set(nearby[n][ind] for n in range(len(nearby)))
+
+        if col.issubset(rang):
+            if field in field_col:
+                field_col[field].append(ind)
+            else:
+                field_col[field] = [ind]
+
+# well this is just a giant bork at this point. got the right answer at one point but didn't properly save the commit.
+# I need to sleep, so going to leave off here. IDK if I'll come back to fix things and rewrite, catching up needs to be done on other days.
